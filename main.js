@@ -301,7 +301,7 @@ var drawPlayers = function(ctx) {
 		playerScale = 1.0;
 	}
     if (isPlayerHit(player)) {
-		drawImageCentered(ctx, g_images.rat01.img, x + randInt(10), OPTIONS.ratY, playerScale);
+		drawImageCentered(ctx, g_images.rat01.img, x + randInt(10) - 5, OPTIONS.ratY, playerScale);
     } else if (isPlayerJumping(player)) {
         drawImageCentered(ctx, g_images.rat01.img, x, OPTIONS.ratY, playerScale);
     } else {

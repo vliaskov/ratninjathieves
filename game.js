@@ -40,6 +40,7 @@ var GAMEOPTIONS = {
   speed: 300,
   jumpDuration: 0.5,   // in seconds
   hitDuration: 0.1,    // in seconds
+  numPlayers: 3,
 };
 
 var SYNC = {
@@ -52,24 +53,6 @@ var SYNC = {
 var g_availablePlayerIds = [];
 for (var ii = 0; ii < 20; ++ii) {
   g_availablePlayerIds.push(ii);
-}
-
-// DELETE THIS!
-for (var ii = 0; ii < 1; ++ii) {
-  SYNC.players.push({
-    playerId: ii,
-    jumpTime: -100000,
-    hits: 0,
-    hitTime: -100000,
-  });
-}
-
-// DELETE THIS!
-for (var ii = 0; ii < 100; ++ii) {
-  SYNC.lasers.push({
-    y: ii * -250 + randInt(40),
-    color: randInt(3),
-  });
 }
 
 var chooseHue = function(ii) {
@@ -106,6 +89,25 @@ var hitPlayer = function(player) {
 var Game;
 var initGame = function() {
   var clock;
+
+  // DELETE THIS!
+  for (var ii = 0; ii < OPTIONS.numPlayers; ++ii) {
+    SYNC.players.push({
+      playerId: ii,
+      jumpTime: -100000,
+      hits: 0,
+      hitTime: -100000,
+    });
+  }
+
+  // DELETE THIS!
+  for (var ii = 0; ii < 100; ++ii) {
+    SYNC.lasers.push({
+      y: ii * -250 + randInt(40),
+      color: randInt(3),
+    });
+  }
+
 
   connect();
   if (g_socket.offline) {
