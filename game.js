@@ -34,7 +34,7 @@ var GAMEOPTIONS = {
   showAll: false,      // show inactive octopi
   noPause: false,      // don't pause the game when out of focus
   debug: false,        // show extra info
-  ratY: 800,
+  ratY: 400,
   speed: 300,
 };
 
@@ -59,7 +59,7 @@ for (var ii = 0; ii < 3; ++ii) {
 for (var ii = 0; ii < 100; ++ii) {
   SYNC.lasers.push({
     y: ii * -250 + randInt(40),
-    color: ["red", "green", "blue"][randInt(3)],
+    color: randInt(3),
   });
 }
 

@@ -75,7 +75,11 @@ var g_images = {
   title:
   {
     url: "images/title.png"
-  }
+  },
+  laser:
+  {
+	url: "images/laser1.png"
+}
 };
 
 Sounds = {
@@ -87,6 +91,29 @@ Sounds = {
     filename: "sounds/jump.wav",
     samples: 6
   },
+};
+
+var GenerateColors = function(images, hsvs, callback) {
+  var count = 0;
+  images.forEach(function(image) {
+    image.imgs = [image.img];
+    hsvs.forEach(function(hsv, ndx) {
+      ++count;
+      ImageProcess.adjustHSV(image.img, hsv.h, hsv.s, hsv.v, function(images, ndx) {
+        return function(img) {
+          images[ndx] = img;
+          --count;
+          checkDone();
+        };
+      }(image.imgs, ndx + 1));
+    });
+  });
+
+  var checkDone= function() {
+    if (count == 0) {
+      callback();
+    }
+  }
 };
 
 var main = function() {
@@ -128,7 +155,18 @@ var main = function() {
     requestId = requestAnimFrame(mainLoop, g_canvas);
   }
 
-  var loader = new Loader(mainLoop);
+  var loader = new Loader(function() {
+    GenerateColors(
+      [
+        g_images.rat01,
+        g_images.laser,
+      ],
+      [
+        {h: 0.33, s: 0, v: 0},
+        {h: 0.66, s: 0, v: 0},
+      ]
+      , mainLoop);
+  });
   loader.loadImages(g_images);
   if (false)  // set to true to repeat background music? Maybe not
   {
@@ -214,6 +252,7 @@ var drawImageCentered = function(ctx, img, x, y)
   ctx.translate(-img.width * 0.5, -img.height * 0.5);
   //ctx.fillStyle = "purple";
   //ctx.fillRect(0, 0, img.width, img.height);
+  ctx.scale(0.5, 0.5);
   ctx.drawImage(img, 0, 0);
   ctx.restore();
 }
@@ -238,8 +277,7 @@ var drawLasers = function(ctx) {
   yOff = SYNC.gameClock * OPTIONS.speed;
   SYNC.lasers.forEach(function(laser, ndx) {
     var y = laser.y + yOff;
-    ctx.fillStyle = laser.color ? laser.color : "red";
-    ctx.fillRect(0, y - 4, ctx.canvas.width, 8);
+	ctx.drawImage(g_images.laser.imgs[laser.color], 0, y - 35);
   });
 };
 
