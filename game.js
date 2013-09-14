@@ -31,91 +31,26 @@
 
 window.onload = main;
 
-var g_battleObstacles = [
-{ type: 0, x: 100, y: 100},
-{ type: 1, x: 550, y: 100},
-{ type: 0, x: 1000, y: 100},
-{ type: 1, x: 1450, y: 100},
-{ type: 1, x: 100, y: 550},
-{ type: 0, x: 550, y: 550},
-{ type: 1, x: 1000, y: 550},
-{ type: 0, x: 1450, y: 550},
-];
-
-var g_battleCollectables = [
-{ scale: 0.5, x: 150, y: 100},
-{ scale: 0.7, x: 350, y: 100},
-{ scale: 0.5, x: 550, y: 100},
-{ scale: 0.7, x: 150, y: 400},
-{ scale: 0.5, x: 350, y: 400},
-{ scale: 0.7, x: 550, y: 400},
-];
-
-var g_battleSpawnPoints = [
-{ x: 1900, y: 1000, },
-{ x: 1200, y: 1200, },
-{ x: 1900, y: 1100, },
-{ x: 1200, y: 1400, },
-];
-
 var g_selected = -1;
 var g_canvas;
 var g_ctx;
 var g_clock = 0;
 var g_bgm;
-var g_octopi = [];
 // World scroll position.
-var g_scrollX = 0;
 var g_scrollY = 0;
-var g_scrollIntX = 0;
 var g_scrollIntY = 0;
-var g_heightScale = 1;
-var g_nextSpawnPoint = 0;
 var g_baseScale = 1;
 var g_obstacles = [];
 var g_collectedItems = [];
 var g_collectibles = [];
 var g_printMsgs = [];
 var g_gameState = 'title';
+
 var OPTIONS = {
 	showAll: false,      // show inactive octopi
 	noPause: false,      // don't pause the game when out of focus
 	debug: false,        // show extra info
 	battle: false,       // start battle mode
-	noObstacles: false,  // turn off obstacles
-	numOctopi: 2,
-	bumpVel: 5,
-	healthBumpMult: 0.3,
-	deathAnimLimit: 300,
-	deathAnimFadeLimit: 150,
-	deathAnimSpeed: 100,
-	respawnTime: 3,
-	legScrunch: 5,
-	legScrunchSpeed: 90,
-	legUnscrunchSpeed: 20,
-	levelWidth: 1024,
-	levelHeight: 768,
-	battleLevelWidth: 1024 * 3,
-	battleLevelHeight: 768 * 3,
-	sideLimit: 100,
-	bottomLimit: 100,
-	cameraChaseSpeed: 0.2,
-	octopusRadius: 85,
-	inkDuration: 1,
-	inkLeakDuration: 1.5,
-	inkCount: 10,
-	inkScale: 0.3,
-	legFriction: 0.98,
-	legRotFriction: 0.98,
-	legAcceleration: 60,
-	legUpDuration: 0.8,
-	shootBackVelocity: -120,
-	urchinScale1: .5,
-	urchinScale2: .8,
-	collectibleScale: .5,
-	collectibleRadius: 40,
-	urchinSpawnRate: .24,
-	collectibleRespawnTime: 10,
 };
 
 MergeOptions(OPTIONS, OctoRender.getOptions());
@@ -161,89 +96,24 @@ function resizeCanvas()
 }
 
 var g_images = {
-	urchin01:
+	rat01:
 	{
-		url: "images/urchin1.png"
+		url: "images/rat01.png"
 	},
-	urchin02:
-	{
-		url: "images/urchin2.png"
-	},
-	ink01:
-	{
-		url: "images/ink01.png"
-	},
-	ink02:
-	{
-		url: "images/ink02.png"
-	},
-	background:
-	{
-		url: "images/BG_tile.png"
-	},
-	collectible:
-	{
-		url: "images/inkdrop.png"
-	},
-	health0:
-	{
-		url: "images/inkbottle_1.png"
-	},
-	health1:
-	{
-		url: "images/inkbottle_2.png"
-	},
-	health2:
-	{
-		url: "images/inkbottle_3.png"
-	},
-	health3:
-	{
-		url: "images/inkbottle_full.png"
-	},
-	playAgain:
-	{
-		url: "images/playAgainButton.png"
-	},
-	outOfInk:
-	{
-		url: "images/OutofInk.png"
-	},
-	title:
+    title:
 	{
 		url: "images/title.png"
-	},
-	tutorial:
-	{
-		url: "images/tutorial.png"
-	},
-	play:
-	{
-		url: "images/playbutton.png"
 	}
 };
 
-Obstacles = [
-	{name:"urchin01", radius: 125, scale: OPTIONS.urchinScale1},//150 original
-	{name:"urchin02", radius: 125, scale: OPTIONS.urchinScale2}//scale should be .4 and .8
-];
-
 Sounds = {
-	ouch: {
+	hit: {
 		filename: "sounds/hit.wav",
 		samples: 3
 	},
-	swim: {
-		filename: "sounds/swim.mp3",
-		samples: 8
-	},
-	eat: {
-		filename: "sounds/eat.wav",
+	jump: {
+		filename: "sounds/jump.wav",
 		samples: 6
-	},
-	urchin: {
-		filename: "sounds/urchin.wav",
-		samples: 2
 	},
 };
 
