@@ -75,7 +75,11 @@ var g_images = {
   title:
   {
     url: "images/title.png"
-  }
+  },
+  laser:
+  {
+	url: "images/laser1.png"
+}
 };
 
 Sounds = {
@@ -214,6 +218,7 @@ var drawImageCentered = function(ctx, img, x, y)
   ctx.translate(-img.width * 0.5, -img.height * 0.5);
   //ctx.fillStyle = "purple";
   //ctx.fillRect(0, 0, img.width, img.height);
+  ctx.scale(0.5, 0.5);
   ctx.drawImage(img, 0, 0);
   ctx.restore();
 }
@@ -238,8 +243,7 @@ var drawLasers = function(ctx) {
   yOff = SYNC.gameClock * OPTIONS.speed;
   SYNC.lasers.forEach(function(laser, ndx) {
     var y = laser.y + yOff;
-    ctx.fillStyle = laser.color ? laser.color : "red";
-    ctx.fillRect(0, y - 4, ctx.canvas.width, 8);
+	ctx.drawImage(g_images.laser.img, 0, y - 35);
   });
 };
 
