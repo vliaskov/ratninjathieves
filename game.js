@@ -35,9 +35,11 @@ var GAMEOPTIONS = {
   noPause: false,      // don't pause the game when out of focus
   debug: false,        // show extra info
   ratY: 400,
+  ratHitYOffset: -60,
+  ratHitHeight: 512/5,
   speed: 300,
   jumpDuration: 0.5,   // in seconds
-  hitDuration: 0.5,    // in seconds
+  hitDuration: 0.1,    // in seconds
 };
 
 var SYNC = {
@@ -53,7 +55,7 @@ for (var ii = 0; ii < 20; ++ii) {
 }
 
 // DELETE THIS!
-for (var ii = 0; ii < 3; ++ii) {
+for (var ii = 0; ii < 1; ++ii) {
   SYNC.players.push({
     playerId: ii,
     jumpTime: -100000,
@@ -123,6 +125,26 @@ var initGame = function() {
     var elapsedTime = now - then;
     then = now;
     SYNC.gameClock += elapsedTime;
+
+    checkPlayers();
+  };
+
+  var checkPlayers = function() {
+    var yOff = SYNC.gameClock * OPTIONS.speed;
+    // check every player vs every laser :-(
+    SYNC.lasers.forEach(function(laser) {
+      // is the laser anywhere near the rats
+      var y = laser.y + yOff - OPTIONS.ratY - OPTIONS.ratHitYOffset;
+      if (y > 0 && y < OPTIONS.ratHitHeight) {
+        // We could hit a rat. check the rats
+        SYNC.players.forEach(function(player) {
+          if (!isPlayerJumping(player) && !isPlayerHit(player)) {
+            hitPlayer(player);
+          }
+        });
+      }
+    });
+
   };
 
   Game = {

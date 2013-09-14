@@ -278,7 +278,7 @@ var drawCircleLine = function(ctx, x, y, radius, color)
 }
 
 var drawLasers = function(ctx, laserNdx) {
-  yOff = SYNC.gameClock * OPTIONS.speed;
+  var yOff = SYNC.gameClock * OPTIONS.speed;
   SYNC.lasers.forEach(function(laser, ndx) {
     var y = laser.y + yOff;
     if (laser.color == laserNdx) {
