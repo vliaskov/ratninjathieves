@@ -249,14 +249,14 @@ var drawBackground = function(ctx)
   ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
 }
 
-var drawImageCentered = function(ctx, img, x, y)
+var drawImageCentered = function(ctx, img, x, y, scaleFactor)
 {
   ctx.save();
   ctx.translate(x, y);
+  ctx.scale(0.3 * scaleFactor, 0.3 * scaleFactor);
   ctx.translate(-img.width * 0.5, -img.height * 0.5);
   //ctx.fillStyle = "purple";
   //ctx.fillRect(0, 0, img.width, img.height);
-  ctx.scale(0.5, 0.5);
   ctx.drawImage(img, 0, 0);
   ctx.restore();
 }
@@ -292,12 +292,13 @@ var drawPlayers = function(ctx) {
   var spacing = ctx.canvas.width / (numPlayers + 1);
   SYNC.players.forEach(function(player, ndx) {
     var x = Math.floor((ndx + 1) * spacing);
+	var playerScale = 1.0;
     if (isPlayerHit(player)) {
-      drawImageCentered(ctx, g_images.rat01.img, x, OPTIONS.ratY + randInt(30));
+      drawImageCentered(ctx, g_images.rat01.img, x, OPTIONS.ratY + randInt(30), playerScale);
     } else if (isPlayerJumping(player)) {
-        drawImageCentered(ctx, g_images.rat01.img, x + randInt(10), OPTIONS.ratY);
+        drawImageCentered(ctx, g_images.rat01.img, x + randInt(10), OPTIONS.ratY, playerScale);
     } else {
-		drawImageCentered(ctx, g_images.rat01.imgs[ndx], x, OPTIONS.ratY);
+		drawImageCentered(ctx, g_images.rat01.imgs[ndx], x, OPTIONS.ratY, playerScale);
     }
   });
 };
