@@ -168,6 +168,7 @@ var main = function() {
       [
         {h: 0.33, s: 0, v: 0},
         {h: 0.66, s: 0, v: 0},
+        {h: 0.0 , s: 0, v: -1},
       ]
       , mainLoop);
   });
@@ -309,6 +310,23 @@ var drawPlayers = function(ctx) {
   });
 };
 
+var drawShadows = function(ctx) {
+  var numPlayers = SYNC.players.length;
+  var spacing = ctx.canvas.width / (numPlayers + 1);
+  SYNC.players.forEach(function(player, ndx) {
+    var x = Math.floor((ndx + 1) * spacing);
+    var y = OPTIONS.ratY;
+    var playerScale = 1.0;
+    if (SYNC.gameClock - player.jumpTime < OPTIONS.jumpDuration) {
+      var adj = (Math.sin(((SYNC.gameClock - player.jumpTime) / OPTIONS.jumpDuration) * Math.PI) * 0.5 + 0.5);
+      playerScale = 1.0 + (playerScaleMax - 1.0) * adj;
+      x += adj * 30;
+      y += adj * 30;
+    }
+		drawImageCentered(ctx, g_images.rat01.imgs[3], x, y, playerScale);
+  });
+};
+
 var drawOther = function(ctx) {
 
 };
@@ -320,6 +338,7 @@ var update = function(elapsedTime, ctx, ndx)
 
   ctx.save();
   drawBackground(ctx);
+  drawShadows(ctx, ndx);
   drawLasers(ctx, ndx);
   drawPlayers(ctx);
   drawOther(ctx);
