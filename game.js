@@ -41,13 +41,17 @@ var GAMEOPTIONS = {
   jumpDuration: 0.5,   // in seconds
   hitDuration: 0.3,    // in seconds
   numPlayers: 3,
+  numLasers: 100,
+  laserYRandom: 40,
+  laserYSpacing: 250,
+  gameOverYOffset: 200,
 };
 
 var SYNC = {
   lasers: [],
   players: [],
-  state: 'title',
   gameClock: 0,
+  gameOver: false,
 };
 
 var g_availablePlayerIds = [];
@@ -104,9 +108,9 @@ var initGame = function() {
   }
 
   // DELETE THIS!
-  for (var ii = 0; ii < 100; ++ii) {
+  for (var ii = 0; ii < OPTIONS.numLasers; ++ii) {
     SYNC.lasers.push({
-      y: ii * -250 + randInt(40),
+      y: ii * -OPTIONS.laserYSpacing + randInt(OPTIONS.laserYRandom),
       color: randInt(3),
     });
   }
@@ -132,6 +136,19 @@ var initGame = function() {
     SYNC.gameClock += elapsedTime;
 
     checkPlayers();
+    checkGameOver();
+  };
+
+  var checkGameOver = function() {
+    if (!SYNC.gameOver) {
+      // check the last laser is off the canvas.
+      var yOff = SYNC.gameClock * OPTIONS.speed;
+      var laser = SYNC.lasers[SYNC.lasers.length - 1];
+      var y = laser.y + yOff - OPTIONS.ratY - OPTIONS.ratHitYOffset;
+      if (y > OPTIONS.gameOverYOffset) {
+        SYNC.gameOver = true;
+      }
+    }
   };
 
   var checkPlayers = function() {

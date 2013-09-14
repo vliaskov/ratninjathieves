@@ -293,6 +293,18 @@ var drawImageCentered = function(ctx, img, x, y, scaleFactor)
   ctx.restore();
 }
 
+var drawImageCenteredNoScale = function(ctx, img, x, y, scaleFactor)
+{
+  ctx.save();
+  ctx.translate(x, y);
+  ctx.scale(scaleFactor, scaleFactor);
+  ctx.translate(-img.width * 0.5, -img.height * 0.5);
+  //ctx.fillStyle = "purple";
+  //ctx.fillRect(0, 0, img.width, img.height);
+  ctx.drawImage(img, 0, 0);
+  ctx.restore();
+}
+
 var drawCircle = function(ctx, x, y, radius, color)
 {
   ctx.fillStyle = color;
@@ -369,11 +381,17 @@ var update = function(elapsedTime, ctx, ndx)
   print(SYNC.gameClock.toFixed(2));
 
   ctx.save();
+
   drawBackground(ctx);
   drawShadows(ctx, ndx);
   drawLasers(ctx, ndx);
   drawPlayers(ctx);
   drawOther(ctx);
+
+  if (SYNC.gameOver) {
+    drawImageCenteredNoScale(ctx, g_images.winIndividual.img, ctx.canvas.width / 2, ctx.canvas.height / 2, 1.0);
+  }
+
   ctx.restore();
 };
 
