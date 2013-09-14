@@ -96,16 +96,16 @@ Sounds = {
 var GenerateColors = function(images, hsvs, callback) {
   var count = 0;
   images.forEach(function(image) {
-    images.imgs = [];
+    image.imgs = [image.img];
     hsvs.forEach(function(hsv, ndx) {
       ++count;
       ImageProcess.adjustHSV(image.img, hsv.h, hsv.s, hsv.v, function(images, ndx) {
         return function(img) {
-          imgs[ndx] = msg;
+          images[ndx] = img;
           --count;
           checkDone();
-        }
-      })
+        };
+      }(image.imgs, ndx + 1));
     });
   });
 
@@ -155,7 +155,18 @@ var main = function() {
     requestId = requestAnimFrame(mainLoop, g_canvas);
   }
 
-  var loader = new Loader(mainLoop);
+  var loader = new Loader(function() {
+    GenerateColors(
+      [
+        g_images.rat01,
+        g_images.laser,
+      ],
+      [
+        {h: 0.33, s: 0, v: 0},
+        {h: 0.66, s: 0, v: 0},
+      ]
+      , mainLoop);
+  });
   loader.loadImages(g_images);
   if (false)  // set to true to repeat background music? Maybe not
   {
@@ -266,7 +277,7 @@ var drawLasers = function(ctx) {
   yOff = SYNC.gameClock * OPTIONS.speed;
   SYNC.lasers.forEach(function(laser, ndx) {
     var y = laser.y + yOff;
-	ctx.drawImage(g_images.laser.img, 0, y - 35);
+	ctx.drawImage(g_images.laser.imgs[laser.color], 0, y - 35);
   });
 };
 

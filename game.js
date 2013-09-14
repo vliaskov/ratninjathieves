@@ -59,7 +59,7 @@ for (var ii = 0; ii < 3; ++ii) {
 for (var ii = 0; ii < 100; ++ii) {
   SYNC.lasers.push({
     y: ii * -250 + randInt(40),
-    color: ["red", "green", "blue"][randInt(3)],
+    color: randInt(3),
   });
 }
 
