@@ -292,7 +292,7 @@ var drawPlayers = function(ctx) {
   var spacing = ctx.canvas.width / (numPlayers + 1);
   SYNC.players.forEach(function(player, ndx) {
     var x = Math.floor((ndx + 1) * spacing);
-    drawImageCentered(ctx, g_images.rat01.img, x, OPTIONS.ratY);
+    drawImageCentered(ctx, g_images.rat01.imgs[ndx], x, OPTIONS.ratY);
   });
 };
 
