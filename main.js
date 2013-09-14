@@ -172,6 +172,8 @@ var main = function() {
       [
         {h: 0.33, s: 0, v: 0},
         {h: 0.11, s: 0, v: 0},
+        {h: 0.0 , s: 0, v: -1},
+        {h: 0.0 , s: 1, v: 0},
       ]
       , mainLoop);
   });
@@ -286,7 +288,7 @@ var drawCircleLine = function(ctx, x, y, radius, color)
 }
 
 var drawLasers = function(ctx, laserNdx) {
-  yOff = SYNC.gameClock * OPTIONS.speed;
+  var yOff = SYNC.gameClock * OPTIONS.speed;
   SYNC.lasers.forEach(function(laser, ndx) {
     var y = laser.y + yOff;
     if (laser.color == laserNdx) {
@@ -301,19 +303,37 @@ var drawPlayers = function(ctx) {
   var spacing = ctx.canvas.width / (numPlayers + 1);
   SYNC.players.forEach(function(player, ndx) {
     var x = Math.floor((ndx + 1) * spacing);
-	var playerScale = 1.0;
+    var y = OPTIONS.ratY;
+    var playerScale = 1.0;
 	if (SYNC.gameClock - player.jumpTime < OPTIONS.jumpDuration) {
 		playerScale = 1.0 + (playerScaleMax - 1.0) * (Math.sin(((SYNC.gameClock - player.jumpTime) / OPTIONS.jumpDuration) * Math.PI) * 0.5 + 0.5);
 	} else {
 		playerScale = 1.0;
 	}
+  var img = g_images.rat01.imgs[ndx];
+
     if (isPlayerHit(player)) {
-		drawImageCentered(ctx, g_images.rat01.img, x + randInt(10), OPTIONS.ratY, playerScale);
-    } else if (isPlayerJumping(player)) {
-        drawImageCentered(ctx, g_images.rat01.img, x, OPTIONS.ratY, playerScale);
-    } else {
-		drawImageCentered(ctx, g_images.rat01.imgs[ndx], x, OPTIONS.ratY, playerScale);
+      img = g_images.rat01.imgs[4];
+      x += randInt(10) - 5;
     }
+    drawImageCentered(ctx, img, x, y, playerScale);
+  });
+};
+
+var drawShadows = function(ctx) {
+  var numPlayers = SYNC.players.length;
+  var spacing = ctx.canvas.width / (numPlayers + 1);
+  SYNC.players.forEach(function(player, ndx) {
+    var x = Math.floor((ndx + 1) * spacing);
+    var y = OPTIONS.ratY;
+    var playerScale = 1.0;
+    if (SYNC.gameClock - player.jumpTime < OPTIONS.jumpDuration) {
+      var adj = (Math.sin(((SYNC.gameClock - player.jumpTime) / OPTIONS.jumpDuration) * Math.PI) * 0.5 + 0.5);
+      playerScale = 1.0 + (playerScaleMax - 1.0) * adj;
+      x += adj * 30;
+      y += adj * 30;
+    }
+		drawImageCentered(ctx, g_images.rat01.imgs[3], x, y, playerScale);
   });
 };
 
@@ -328,6 +348,7 @@ var update = function(elapsedTime, ctx, ndx)
 
   ctx.save();
   drawBackground(ctx);
+  drawShadows(ctx, ndx);
   drawLasers(ctx, ndx);
   drawPlayers(ctx);
   drawOther(ctx);

@@ -35,9 +35,12 @@ var GAMEOPTIONS = {
   noPause: false,      // don't pause the game when out of focus
   debug: false,        // show extra info
   ratY: 400,
+  ratHitYOffset: -60,
+  ratHitHeight: 512/5,
   speed: 300,
   jumpDuration: 0.5,   // in seconds
-  hitDuration: 0.5,    // in seconds
+  hitDuration: 0.1,    // in seconds
+  numPlayers: 3,
 };
 
 var SYNC = {
@@ -50,24 +53,6 @@ var SYNC = {
 var g_availablePlayerIds = [];
 for (var ii = 0; ii < 20; ++ii) {
   g_availablePlayerIds.push(ii);
-}
-
-// DELETE THIS!
-for (var ii = 0; ii < 3; ++ii) {
-  SYNC.players.push({
-    playerId: ii,
-    jumpTime: -100000,
-    hits: 0,
-    hitTime: -100000,
-  });
-}
-
-// DELETE THIS!
-for (var ii = 0; ii < 100; ++ii) {
-  SYNC.lasers.push({
-    y: ii * -250 + randInt(40),
-    color: randInt(3),
-  });
 }
 
 var chooseHue = function(ii) {
@@ -105,6 +90,25 @@ var Game;
 var initGame = function() {
   var clock;
 
+  // DELETE THIS!
+  for (var ii = 0; ii < OPTIONS.numPlayers; ++ii) {
+    SYNC.players.push({
+      playerId: ii,
+      jumpTime: -100000,
+      hits: 0,
+      hitTime: -100000,
+    });
+  }
+
+  // DELETE THIS!
+  for (var ii = 0; ii < 100; ++ii) {
+    SYNC.lasers.push({
+      y: ii * -250 + randInt(40),
+      color: randInt(3),
+    });
+  }
+
+
   connect();
   if (g_socket.offline) {
     log("offline");
@@ -123,6 +127,26 @@ var initGame = function() {
     var elapsedTime = now - then;
     then = now;
     SYNC.gameClock += elapsedTime;
+
+    checkPlayers();
+  };
+
+  var checkPlayers = function() {
+    var yOff = SYNC.gameClock * OPTIONS.speed;
+    // check every player vs every laser :-(
+    SYNC.lasers.forEach(function(laser) {
+      // is the laser anywhere near the rats
+      var y = laser.y + yOff - OPTIONS.ratY - OPTIONS.ratHitYOffset;
+      if (y > 0 && y < OPTIONS.ratHitHeight) {
+        // We could hit a rat. check the rats
+        SYNC.players.forEach(function(player) {
+          if (!isPlayerJumping(player) && !isPlayerHit(player)) {
+            hitPlayer(player);
+          }
+        });
+      }
+    });
+
   };
 
   Game = {
