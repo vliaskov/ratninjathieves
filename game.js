@@ -36,6 +36,8 @@ var GAMEOPTIONS = {
   debug: false,        // show extra info
   ratY: 400,
   speed: 300,
+  jumpDuration: 0.5,   // in seconds
+  hitDuration: 0.5,    // in seconds
 };
 
 var SYNC = {
@@ -52,7 +54,12 @@ for (var ii = 0; ii < 20; ++ii) {
 
 // DELETE THIS!
 for (var ii = 0; ii < 3; ++ii) {
-  SYNC.players.push({playerId: ii});
+  SYNC.players.push({
+    playerId: ii,
+    jumpTime: -100000,
+    hits: 0,
+    hitTime: -100000,
+  });
 }
 
 // DELETE THIS!
@@ -76,9 +83,25 @@ var chooseHue = function(ii) {
   return hue;
 };
 
+var isPlayerJumping = function(player) {
+  var timeSinceLastJump = SYNC.gameClock - player.jumpTime;
+  return timeSinceLastJump < OPTIONS.jumpDuration;
+};
+
+var jumpPlayer = function(player) {
+  player.jumpTime = SYNC.gameClock;
+};
+
+var isPlayerHit = function(player) {
+  var timeSinceLastHit = SYNC.gameClock - player.hitTime;
+  return timeSinceLastHit < OPTIONS.hitDuration;
+};
+
+var hitPlayer = function(player) {
+  player.hitTime = SYNC.gameClock;
+};
 
 var Game;
-
 var initGame = function() {
   var clock;
 
@@ -90,6 +113,8 @@ var initGame = function() {
     log("ONLINE!!!--------");
     clock = new SyncedClock();
   };
+
+  InputSystem.startInput();
 
   var then = clock.getTime();
 

@@ -42,9 +42,9 @@ InputSystem = (function(){
 		}
 		switch (String.fromCharCode(c).toLowerCase())
 		{
-		  case 'a': addEvent(0, 'jump');
-		  case 'b': addEvent(1, 'jump');
-		  case 'c': addEvent(2, 'jump');
+		  case 'a': addEvent(0, 'jump'); break;
+		  case 'b': addEvent(1, 'jump'); break;
+		  case 'p': addEvent(2, 'jump'); break;
 		}
 	}, false);
 
@@ -53,6 +53,10 @@ InputSystem = (function(){
 			return;
 		}
 		// Ignoreing action for now. Hack this shit in.
+		var player = SYNC.players[playerId];
+		if (!isPlayerJumping(player)) {
+		  jumpPlayer(player);
+		}
 	};
 
 	var startInput = function(){
