@@ -170,13 +170,27 @@ var main = function() {
     g_clock += elapsedTime;
 
     gameUpdate();
+
+    // Score
     g_ctxs.forEach(function(ctx, ndx) {
       update(elapsedTime, ctx, ndx);
       ctx.save();
       ctx.font = "30pt sans-serif";
       ctx.fillStyle = "white";
 //      ctx.strokeStyle = "black";
-      var msg = "Ow! = " + SYNC.players[ndx].hits;
+      var score = 0;
+      var maxHits = SYNC.topLaser + 1;
+      SYNC.players.forEach(function(otherPlayer, otherNdx) {
+        if (ndx == otherNdx) {
+          // It's me
+          score += maxHits - otherPlayer.hits;
+        } else {
+          // It's other
+          score += (maxHits - otherPlayer.hits) * 2;
+        }
+      });
+
+      var msg = "Score: " + score;
       ctx.fillText(msg, OPTIONS.hudX, OPTIONS.hudY);
 //      ctx.strokeText(msg, OPTIONS.hudX, OPTIONS.hudY);
       ctx.restore();
