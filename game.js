@@ -53,6 +53,7 @@ var SYNC = {
   gameClock: 0,
   gameOver: false,
   topLaser: 0,
+  highScore: 0,
 };
 
 var g_availablePlayerIds = [];
@@ -132,7 +133,7 @@ var initGame = function() {
 
   var update = function() {
     var now = clock.getTime();
-    var elapsedTime = now - then;
+    var elapsedTime = Math.min(0.1, now - then);
     then = now;
     SYNC.gameClock += elapsedTime;
 

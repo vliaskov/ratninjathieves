@@ -189,6 +189,8 @@ var main = function() {
           score += (maxHits - otherPlayer.hits) * 2;
         }
       });
+      SYNC.players[ndx].score = score;
+      SYNC.highScore = Math.max(score, SYNC.highScore);
 
       var msg = "Score: " + score;
       ctx.fillText(msg, OPTIONS.hudX, OPTIONS.hudY);
@@ -403,7 +405,11 @@ var update = function(elapsedTime, ctx, ndx)
   drawOther(ctx);
 
   if (SYNC.gameOver) {
-    drawImageCenteredNoScale(ctx, g_images.winIndividual.img, ctx.canvas.width / 2, ctx.canvas.height / 2, 1.0);
+    var img = g_images.winIndividual.img;
+    if (SYNC.players[ndx].score != SYNC.highScore) {
+      var img = g_images.loseIndividual.img;
+    }
+    drawImageCenteredNoScale(ctx, img, ctx.canvas.width / 2, ctx.canvas.height / 2, 1.0);
   }
 
   ctx.restore();
