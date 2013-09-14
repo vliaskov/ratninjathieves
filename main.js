@@ -292,7 +292,13 @@ var drawPlayers = function(ctx) {
   var spacing = ctx.canvas.width / (numPlayers + 1);
   SYNC.players.forEach(function(player, ndx) {
     var x = Math.floor((ndx + 1) * spacing);
-    drawImageCentered(ctx, g_images.rat01.imgs[ndx], x, OPTIONS.ratY);
+    if (isPlayerHit(player)) {
+      drawImageCentered(ctx, g_images.rat01.img, x, OPTIONS.ratY + randInt(30));
+    } else if (isPlayerJumping(player)) {
+        drawImageCentered(ctx, g_images.rat01.img, x + randInt(10), OPTIONS.ratY);
+    } else {
+		drawImageCentered(ctx, g_images.rat01.imgs[ndx], x, OPTIONS.ratY);
+    }
   });
 };
 
