@@ -39,7 +39,7 @@ var GAMEOPTIONS = {
   ratHitHeight: 512/5,
   speed: 300,
   jumpDuration: 0.5,   // in seconds
-  hitDuration: 0.1,    // in seconds
+  hitDuration: 0.3,    // in seconds
   numPlayers: 3,
 };
 
@@ -84,6 +84,8 @@ var isPlayerHit = function(player) {
 
 var hitPlayer = function(player) {
   player.hitTime = SYNC.gameClock;
+  player.clear = false;
+  ++player.hits;
 };
 
 var Game;
@@ -97,6 +99,7 @@ var initGame = function() {
       jumpTime: -100000,
       hits: 0,
       hitTime: -100000,
+      clear: true,
     });
   }
 
@@ -133,20 +136,25 @@ var initGame = function() {
 
   var checkPlayers = function() {
     var yOff = SYNC.gameClock * OPTIONS.speed;
+    var clears = [true, true, true];
     // check every player vs every laser :-(
     SYNC.lasers.forEach(function(laser) {
       // is the laser anywhere near the rats
       var y = laser.y + yOff - OPTIONS.ratY - OPTIONS.ratHitYOffset;
       if (y > 0 && y < OPTIONS.ratHitHeight) {
         // We could hit a rat. check the rats
-        SYNC.players.forEach(function(player) {
-          if (!isPlayerJumping(player) && !isPlayerHit(player)) {
+        SYNC.players.forEach(function(player, ndx) {
+          clears[ndx] = false;
+          if (player.clear && !isPlayerJumping(player) && !isPlayerHit(player)) {
             hitPlayer(player);
           }
         });
       }
     });
 
+    SYNC.players.forEach(function(player, ndx) {
+      player.clear = clears[ndx];
+    });
   };
 
   Game = {

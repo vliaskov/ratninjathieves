@@ -39,6 +39,8 @@ var g_printMsgs = [];
 var update;
 
 var OPTIONS = {
+  hudX: 50,
+  hudY: 50,
 };
 
 MergeOptions(OPTIONS, GAMEOPTIONS);
@@ -154,6 +156,14 @@ var main = function() {
     gameUpdate();
     g_ctxs.forEach(function(ctx, ndx) {
       update(elapsedTime, ctx, ndx);
+      ctx.save();
+      ctx.font = "30pt sans-serif";
+      ctx.fillStyle = "white";
+//      ctx.strokeStyle = "black";
+      var msg = "Ow! = " + SYNC.players[ndx].hits;
+      ctx.fillText(msg, OPTIONS.hudX, OPTIONS.hudY);
+//      ctx.strokeText(msg, OPTIONS.hudX, OPTIONS.hudY);
+      ctx.restore();
       drawPrint(ctx);
     });
     requestId = requestAnimFrame(mainLoop, g_canvases[0]);
@@ -188,7 +198,7 @@ var main = function() {
   var resize = function()
   {
     resizeCanvas();
-    update(0.0001, g_ctx);
+    //update(0.0001, g_ctx);
   }
 
   var pauseGame = function()
