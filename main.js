@@ -79,6 +79,18 @@ var g_images = {
   {
     url: "images/title.png"
   },
+  winIndividual: {
+    url: "images/win-individual.jpg"
+  },
+  loseIndividual: {
+    url: "images/lose-individual.jpg"
+  },
+  winAll: {
+    url: "images/win-all.jpg"
+  },
+  loseAll: {
+    url: "images/lose-all.jpg"
+  },
 	laser:
 	{
 		url: "images/laser1.png"
