@@ -77,10 +77,14 @@ var g_images = {
   {
     url: "images/title.png"
   },
-  laser:
-  {
-	url: "images/laser1.png"
-}
+	laser:
+	{
+		url: "images/laser1.png"
+	},
+	background:
+	{
+		url: "images/background.png"
+	}
 };
 
 Sounds = {
@@ -167,7 +171,7 @@ var main = function() {
       ],
       [
         {h: 0.33, s: 0, v: 0},
-        {h: 0.66, s: 0, v: 0},
+        {h: 0.11, s: 0, v: 0},
       ]
       , mainLoop);
   });
@@ -243,10 +247,14 @@ var main = function() {
   }
 }
 
-var drawBackground = function(ctx)
+var drawBackground = function(ctx, offset)
 {
-  ctx.fillStyle = "rgb(80,80,80)";
-  ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+//  ctx.fillStyle = "rgb(80,80,80)";
+//  ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+	var yOff = SYNC.gameClock * OPTIONS.speed;
+	ctx.drawImage(g_images.background.img, 0, (yOff % 320), 320, 320);
+	ctx.drawImage(g_images.background.img, 0, (yOff % 320) - 320, 320, 320);
+	ctx.drawImage(g_images.background.img, 0, (yOff % 320) + 320, 320, 320);
 }
 
 var drawImageCentered = function(ctx, img, x, y, scaleFactor)
