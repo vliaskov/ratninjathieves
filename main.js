@@ -183,7 +183,7 @@ var main = function() {
       SYNC.players.forEach(function(otherPlayer, otherNdx) {
         if (ndx == otherNdx) {
           // It's me
-          score += maxHits - otherPlayer.hits;
+          score -= otherPlayer.hits;
         } else {
           // It's other
           score += (maxHits - otherPlayer.hits) * 2;
