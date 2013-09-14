@@ -287,16 +287,22 @@ var drawLasers = function(ctx, laserNdx) {
   });
 };
 
+var playerScaleMax = 1.4
 var drawPlayers = function(ctx) {
   var numPlayers = SYNC.players.length;
   var spacing = ctx.canvas.width / (numPlayers + 1);
   SYNC.players.forEach(function(player, ndx) {
     var x = Math.floor((ndx + 1) * spacing);
 	var playerScale = 1.0;
+	if (SYNC.gameClock - player.jumpTime < OPTIONS.jumpDuration) {
+		playerScale = 1.0 + (playerScaleMax - 1.0) * (Math.sin(((SYNC.gameClock - player.jumpTime) / OPTIONS.jumpDuration) * Math.PI) * 0.5 + 0.5);
+	} else {
+		playerScale = 1.0;
+	}
     if (isPlayerHit(player)) {
-      drawImageCentered(ctx, g_images.rat01.img, x, OPTIONS.ratY + randInt(30), playerScale);
+		drawImageCentered(ctx, g_images.rat01.img, x + randInt(10), OPTIONS.ratY, playerScale);
     } else if (isPlayerJumping(player)) {
-        drawImageCentered(ctx, g_images.rat01.img, x + randInt(10), OPTIONS.ratY, playerScale);
+        drawImageCentered(ctx, g_images.rat01.img, x, OPTIONS.ratY, playerScale);
     } else {
 		drawImageCentered(ctx, g_images.rat01.imgs[ndx], x, OPTIONS.ratY, playerScale);
     }
