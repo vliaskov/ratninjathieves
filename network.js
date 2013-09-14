@@ -46,7 +46,7 @@ var getOctopusForPlayer = (function() {
 	}
 }());
 
-function useOctopiLevel(ii) {
+var useOctopiLevel = function(ii) {
 	var octopi = g_octopiByNumPlayers[ii];
 	var octoNetInfo = octopi.pop();
 	g_octopiByNumPlayers[ii + 1].push(octoNetInfo);
@@ -57,7 +57,7 @@ function useOctopiLevel(ii) {
 	return octoNetInfo;
 }
 
-function removePlayerFromOctopus(octoNetInfo) {
+var removePlayerFromOctopus = function(octoNetInfo) {
 	var newCount = NUM_PLAYERS_PER_OCTOPUS - octoNetInfo.freeSlots.length;
 	var oldCount = newCount + 1;
 	var oldIndex = g_octopiByNumPlayers[oldCount].indexOf(octoNetInfo);
@@ -74,7 +74,7 @@ function removePlayerFromOctopus(octoNetInfo) {
 	}
 }
 
-function addNetOctopus(octopus) {
+var addNetOctopus = function(octopus) {
 	var netInfo = {
 		octo: octopus,
 		players: [],
@@ -84,7 +84,7 @@ function addNetOctopus(octopus) {
 	g_octopiByNumPlayers[0].unshift(netInfo);
 }
 
-function redistributePlayers(octoNetInfo) {
+var redistributePlayers = function(octoNetInfo) {
 	var players = [];
 	while (octoNetInfo.players.length) {
 		var player = octoNetInfo.players[0];
@@ -96,7 +96,7 @@ function redistributePlayers(octoNetInfo) {
 	}
 }
 
-function connect()
+var connect = function()
 {
 	if (!window.io)
 	{
@@ -126,7 +126,7 @@ function connect()
 	g_socket.on('disconnect', disconnected);
 }
 
-function sendCmd(cmd, id, data)
+var sendCmd = function(cmd, id, data)
 {
 	g_socket.emit('message',{
 		cmd: cmd,
@@ -135,7 +135,7 @@ function sendCmd(cmd, id, data)
 	});
 }
 
-function connected()
+var connected = function()
 {
 	sendCmd("server");
 	sendCmd("broadcast", -1,{
@@ -144,13 +144,13 @@ function connected()
 	updateOnlineStatus();
 }
 
-function updateOnlineStatus()
+var updateOnlineStatus = function()
 {
 	g_statusElem.innerHTML = "num players: " + g_numPlayers;
 	g_statusElem.style.backgroundColor = "green";
 }
 
-function disconnected()
+var disconnected = function()
 {
 	g_statusElem.innerHTML = "disconnected";
 	g_statusElem.style.backgroundColor = "red";
@@ -165,7 +165,7 @@ function disconnected()
 	connect();
 }
 
-function sendCmd(cmd, id, data)
+var sendCmd = function(cmd, id, data)
 {
 	g_socket.emit('message',{
 		cmd: cmd,
@@ -174,7 +174,7 @@ function sendCmd(cmd, id, data)
 	});
 }
 
-function processMessage(msg)
+var processMessage = function(msg)
 {
 	switch (msg.cmd)
 	{
@@ -190,7 +190,7 @@ function processMessage(msg)
 	}
 }
 
-function startPlayer(id)
+var startPlayer = function(id)
 {
 	// Checks if a player is already under this id
 	if (g_players[id])
@@ -205,7 +205,7 @@ function startPlayer(id)
 	g_players[id] = new Player(id);
 }
 
-function updatePlayer(id, msg)
+var updatePlayer = function(id, msg)
 {
 	var player = g_players[id];
 	if (!player)
@@ -216,7 +216,7 @@ function updatePlayer(id, msg)
 	player.update(msg);
 }
 
-function removePlayer(id)
+var removePlayer = function(id)
 {
 	if (g_players[id])
 	{
@@ -238,12 +238,12 @@ g_slotRemap = [
 	3
 ];
 
-function getLegId(slotId)
+var getLegId = function(slotId)
 {
 	return g_slotRemap[slotId % 8];
 }
 
-function Player(clientId)
+var Player = function(clientId)
 {
 	this.clientId = clientId;
 	this.slotId = -1;
