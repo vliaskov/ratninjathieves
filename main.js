@@ -29,8 +29,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-var g_canvas;
-var g_ctx;
+var g_numCanvaes = 3;
+var g_canvases = [];
+var g_ctxs = [];
 var g_clock = 0;
 var g_bgm;
 // World scroll position.
@@ -119,7 +120,10 @@ var GenerateColors = function(images, hsvs, callback) {
 var main = function() {
   initGame();
   var requestId;
-  g_canvas = document.getElementById("canvas");
+  for (var ii = 0; ii < g_numCanvaes; ++ii) {
+    g_canvases.push(document.getElementById("canvas" + ii));
+    g_ctxs.push(g_canvases[ii].getContext("2d"));
+  }
   resizeCanvas();
   window.addEventListener('resize', resize, true);
   window.addEventListener('blur', function() {
@@ -132,7 +136,6 @@ var main = function() {
       resumeGame();
     }
   }, true);
-  g_ctx = g_canvas.getContext("2d");
 
   window.addEventListener('click', handleClick);
   window.addEventListener('touchstart', handleClick);
@@ -149,10 +152,11 @@ var main = function() {
     g_clock += elapsedTime;
 
     gameUpdate();
-    update(elapsedTime, g_ctx);
-    drawPrint(g_ctx);
-
-    requestId = requestAnimFrame(mainLoop, g_canvas);
+    g_ctxs.forEach(function(ctx, ndx) {
+      update(elapsedTime, ctx, ndx);
+      drawPrint(ctx);
+    });
+    requestId = requestAnimFrame(mainLoop, g_canvases[0]);
   }
 
   var loader = new Loader(function() {
@@ -273,11 +277,13 @@ var drawCircleLine = function(ctx, x, y, radius, color)
   ctx.stroke();
 }
 
-var drawLasers = function(ctx) {
+var drawLasers = function(ctx, laserNdx) {
   yOff = SYNC.gameClock * OPTIONS.speed;
   SYNC.lasers.forEach(function(laser, ndx) {
     var y = laser.y + yOff;
-	ctx.drawImage(g_images.laser.imgs[laser.color], 0, y - 35);
+    if (laser.color == laserNdx) {
+      ctx.drawImage(g_images.laser.imgs[laser.color], 0, y - 35);
+    }
   });
 };
 
@@ -294,14 +300,14 @@ var drawOther = function(ctx) {
 
 };
 
-var update = function(elapsedTime, ctx)
+var update = function(elapsedTime, ctx, ndx)
 {
   print("");
   print(SYNC.gameClock.toFixed(2));
 
   ctx.save();
   drawBackground(ctx);
-  drawLasers(ctx);
+  drawLasers(ctx, ndx);
   drawPlayers(ctx);
   drawOther(ctx);
   ctx.restore();
