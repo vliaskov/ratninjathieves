@@ -29,7 +29,7 @@ var getURLOptions = function(obj)
 	}
 };
 
-function MergeOptions(opt, newOpt)
+var MergeOptions = function(opt, newOpt)
 {
 	for (var name in newOpt)
 	{
@@ -37,7 +37,7 @@ function MergeOptions(opt, newOpt)
 	}
 }
 
-function log(msg)
+var log = function(msg)
 {
 	if (window.console && window.console.log)
 	{
@@ -45,12 +45,12 @@ function log(msg)
 	}
 }
 
-function getTime()
+var getTime = function()
 {
 	return(new Date()).getTime() * 0.001;
 }
 
-function LoadImage(url, callback)
+var LoadImage = function(url, callback)
 {
 	var image = new Image();
 	image.onload = callback;
@@ -58,7 +58,7 @@ function LoadImage(url, callback)
 	return image;
 }
 
-function LoadImages(images, callback)
+var LoadImages = function(images, callback)
 {
 	var count = 0;
 	for (var name in images)
@@ -73,7 +73,7 @@ function LoadImages(images, callback)
 	}
 }
 
-function Loader(callback)
+var Loader = function(callback)
 {
 	var count = 0;
 
@@ -98,11 +98,15 @@ function Loader(callback)
 
 
 
-function degToRad(deg)
+var degToRad = function(deg)
 {
 	return deg * Math.PI / 180;
 }
 
+// return int from 0 to range - 1
+var randInt = function(range) {
+  return Math.floor(Math.random() * range);
+}
 
 // shim layer with setTimeout fallback
 window.requestAnimFrame = (function(){

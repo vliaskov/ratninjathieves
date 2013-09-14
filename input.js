@@ -84,7 +84,7 @@ InputSystem = (function(){
 		}
 	}, false);
 
-	function getEventQueue(octopusId){
+	var getEventQueue = function(octopusId){
 		var eventQueue = eventQueues[octopusId];
 		if (!eventQueue){
 			eventQueue = [];
@@ -93,7 +93,7 @@ InputSystem = (function(){
 		return eventQueue;
 	}
 
-	function getListeners(octopusId, type){
+	var getListeners = function(octopusId, type){
 		var octopusListeners = listeners[octopusId];
 		if (!octopusListeners){
 			octopusListeners = {};
@@ -107,7 +107,7 @@ InputSystem = (function(){
 		return list;
 	}
 
-	function addEvent(octopusId, direction){
+	var addEvent = function(octopusId, direction){
 		if (!active){
 			return;
 		}
@@ -127,7 +127,7 @@ InputSystem = (function(){
 		removeOldEvents(octopusId);
 	}
 
-	function removeOldEvents(octopusId){
+	var removeOldEvents = function(octopusId){
 		var eventQueue = getEventQueue(octopusId);
 		var now = g_clock;
 		var ii = 0;
@@ -140,16 +140,16 @@ InputSystem = (function(){
 		eventQueue.splice(0, ii);
 	}
 
-	function addEventListener(octopusId, type, listener){
+	var addEventListener = function(octopusId, type, listener){
 		var list = getListeners(octopusId, [type]);
 		list.push(listener);
 	}
 
-	function startInput(){
+	var startInput = function(){
 		active = true;
 	}
 
-	function stopInput(){
+	var stopInput = function(){
 		active = false;
 	}
 
@@ -181,7 +181,7 @@ var OctopusControl = function(octopusId)
 		rotation: 0
 	};
 
-	function handleDirection(event)
+	var handleDirection = function(event)
 	{
 		var leg = legsInfo[event.direction];
 		if (leg.upTime < g_clock)
@@ -197,16 +197,16 @@ var OctopusControl = function(octopusId)
 
 	InputSystem.addEventListener(octopusId, 'direction', handleDirection);
 
-	function getOctoId() {
+	var getOctoId = function() {
 		return octopusId;
 	}
 
-	function getInfo()
+	var getInfo = function()
 	{
 		return octoInfo;
 	}
 
-	function setInfo(x, y, rotation)
+	var setInfo = function(x, y, rotation)
 	{
 		xVel = 0;
 		yVel = 0;
@@ -220,12 +220,12 @@ var OctopusControl = function(octopusId)
 		octoInfo.rotation = rotation;
 	}
 
-	function getLegsInfo()
+	var getLegsInfo = function()
 	{
 		return legsInfo;
 	}
 
-	function setLegs(info)
+	var setLegs = function(info)
 	{
 		legsInfo = JSON.parse(JSON.stringify(info));
 		for (var ii = 0; ii < legsInfo.length; ++ii)
@@ -236,7 +236,7 @@ var OctopusControl = function(octopusId)
 	}
 
 	var lastInfo;
-	function update(elapsedTime)
+	var update = function(elapsedTime)
 	{
 //    info =
 //    "xa: " + xAccel + " ya:" + yAccel +
@@ -275,12 +275,12 @@ var OctopusControl = function(octopusId)
 		}
 	}
 
-	function addVel(xv, yv) {
+	var addVel = function(xv, yv) {
 		xVel += xv;
 		yVel += yv;
 	}
 
-	function shootBack(other)
+	var shootBack = function(other)
 	{
 		if (OPTIONS.battle)
 		{
