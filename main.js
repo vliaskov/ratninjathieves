@@ -89,6 +89,29 @@ Sounds = {
   },
 };
 
+var GenerateColors = function(images, hsvs, callback) {
+  var count = 0;
+  images.forEach(function(image) {
+    images.imgs = [];
+    hsvs.forEach(function(hsv, ndx) {
+      ++count;
+      ImageProcess.adjustHSV(image.img, hsv.h, hsv.s, hsv.v, function(images, ndx) {
+        return function(img) {
+          imgs[ndx] = msg;
+          --count;
+          checkDone();
+        }
+      })
+    });
+  });
+
+  var checkDone= function() {
+    if (count == 0) {
+      callback();
+    }
+  }
+};
+
 var main = function() {
   initGame();
   var requestId;
