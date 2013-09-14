@@ -34,7 +34,7 @@ var GAMEOPTIONS = {
   showAll: false,      // show inactive octopi
   noPause: false,      // don't pause the game when out of focus
   debug: false,        // show extra info
-  ratY: 800,
+  ratY: 400,
   speed: 300,
 };
 
