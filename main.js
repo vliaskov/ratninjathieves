@@ -169,6 +169,7 @@ var main = function() {
         {h: 0.33, s: 0, v: 0},
         {h: 0.66, s: 0, v: 0},
         {h: 0.0 , s: 0, v: -1},
+        {h: 0.0 , s: 1, v: 0},
       ]
       , mainLoop);
   });
@@ -294,19 +295,20 @@ var drawPlayers = function(ctx) {
   var spacing = ctx.canvas.width / (numPlayers + 1);
   SYNC.players.forEach(function(player, ndx) {
     var x = Math.floor((ndx + 1) * spacing);
-	var playerScale = 1.0;
+    var y = OPTIONS.ratY;
+    var playerScale = 1.0;
 	if (SYNC.gameClock - player.jumpTime < OPTIONS.jumpDuration) {
 		playerScale = 1.0 + (playerScaleMax - 1.0) * (Math.sin(((SYNC.gameClock - player.jumpTime) / OPTIONS.jumpDuration) * Math.PI) * 0.5 + 0.5);
 	} else {
 		playerScale = 1.0;
 	}
+  var img = g_images.rat01.imgs[ndx];
+
     if (isPlayerHit(player)) {
-		drawImageCentered(ctx, g_images.rat01.img, x + randInt(10) - 5, OPTIONS.ratY, playerScale);
-    } else if (isPlayerJumping(player)) {
-        drawImageCentered(ctx, g_images.rat01.img, x, OPTIONS.ratY, playerScale);
-    } else {
-		drawImageCentered(ctx, g_images.rat01.imgs[ndx], x, OPTIONS.ratY, playerScale);
+      img = g_images.rat01.imgs[4];
+      x += randInt(10) - 5;
     }
+    drawImageCentered(ctx, img, x, y, playerScale);
   });
 };
 
