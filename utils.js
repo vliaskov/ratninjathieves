@@ -106,7 +106,50 @@ var degToRad = function(deg)
 // return int from 0 to range - 1
 var randInt = function(range) {
   return Math.floor(Math.random() * range);
-}
+};
+
+var sendJSON = function(url, jsonObject, callback) {
+  var error = 'sendJSON failed to load url "' + url + '"';
+  var request;
+  if (window.XMLHttpRequest) {
+    request = new XMLHttpRequest();
+    if (request.overrideMimeType) {
+      request.overrideMimeType('text/plain');
+    }
+  } else if (window.ActiveXObject) {
+    request = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+  } else {
+    throw 'XMLHttpRequest is disabled';
+  }
+  request.open('POST', url, true);
+  var js = JSON.stringify(jsonObject);
+  var finish = function() {
+    if (request.readyState == 4) {
+      var json = undefined;
+      // HTTP reports success with a 200 status. The file protocol reports
+      // success with zero. HTTP does not use zero as a status code (they
+      // start at 100).
+      // https://developer.mozilla.org/En/Using_XMLHttpRequest
+      var success = request.status == 200 || request.status == 0;
+      if (success) {
+        try {
+          json = JSON.parse(request.responseText);
+        } catch (e) {
+          success = false;
+        }
+      }
+      callback(json, success ? null : 'could not load: ' + url);
+    }
+  };
+  try {
+    request.onreadystatechange = finish;
+    request.setRequestHeader("Content-type", "application/json");
+    request.send(js);
+  } catch (e) {
+    callback(null, 'could not load: ' + url);
+  }
+};
+
 
 // shim layer with setTimeout fallback
 window.requestAnimFrame = (function(){

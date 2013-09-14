@@ -45,6 +45,11 @@ var SYNC = {
   gameClock: 0,
 };
 
+var g_availablePlayerIds = [];
+for (var ii = 0; ii < 20; ++ii) {
+  g_availablePlayerIds.push(ii);
+}
+
 // DELETE THIS!
 for (var ii = 0; ii < 3; ++ii) {
   SYNC.players.push({playerId: ii});
@@ -58,8 +63,52 @@ for (var ii = 0; ii < 100; ++ii) {
   });
 }
 
-var gameUpdate = function(elapsedTime) {
-  SYNC.gameClock += elapsedTime;
+var chooseHue = function(ii) {
+  var hue = (1 - ii * 0.2) % 1;
+  if (ii % 10 >= 5)
+  {
+    hue += 0.1;
+  }
+  if (ii % 20 >= 10)
+  {
+    hue += 0.05;
+  }
+  return hue;
+};
+
+
+var Game;
+
+var initGame = function() {
+  var clock;
+
+  connect();
+  if (g_socket.offline) {
+    log("offline");
+    clock = new LocalClock();
+  } else {
+    log("ONLINE!!!--------");
+    clock = new SyncedClock();
+  };
+
+  var then = clock.getTime();
+
+  var update = function() {
+    var now = clock.getTime();
+    var elapsedTime = now - then;
+    then = now;
+    SYNC.gameClock += elapsedTime;
+  };
+
+  Game = {
+    update: update,
+  };
+
+};
+
+
+var gameUpdate = function() {
+  Game.update();
 };
 
 

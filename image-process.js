@@ -108,6 +108,8 @@ function adjustHSV(image, hue, saturation, value, callback) {
 
 return {
     adjustHSV: adjustHSV,
+    rgbToHsv: rgbToHsv,
+    hsvToRgb: hsvToRgb,
 
     dummy: null  // marks the end
 };

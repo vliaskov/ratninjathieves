@@ -102,6 +102,7 @@ var connect = function()
 	{
 		log("no socket io");
 		g_socket = {
+            offline: true,
 			send: function()
  			{
 			}
