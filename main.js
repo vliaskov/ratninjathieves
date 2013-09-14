@@ -90,7 +90,7 @@ Sounds = {
 };
 
 var main = function() {
-  connect();
+  initGame();
   var requestId;
   g_canvas = document.getElementById("canvas");
   resizeCanvas();
@@ -107,19 +107,6 @@ var main = function() {
   }, true);
   g_ctx = g_canvas.getContext("2d");
 
-  var chooseHue = function(ii) {
-    var hue = (1 - ii * 0.2) % 1;
-    if (ii % 10 >= 5)
-    {
-      hue += 0.1;
-    }
-    if (ii % 20 >= 10)
-    {
-      hue += 0.05;
-    }
-    return hue;
-  }
-
   window.addEventListener('click', handleClick);
   window.addEventListener('touchstart', handleClick);
 
@@ -134,6 +121,7 @@ var main = function() {
     then = now;
     g_clock += elapsedTime;
 
+    gameUpdate();
     update(elapsedTime, g_ctx);
     drawPrint(g_ctx);
 
@@ -271,9 +259,6 @@ var drawOther = function(ctx) {
 var update = function(elapsedTime, ctx)
 {
   print("");
-
-  SYNC.gameClock += elapsedTime;
-
   print(SYNC.gameClock.toFixed(2));
 
   ctx.save();
