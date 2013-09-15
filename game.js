@@ -92,6 +92,7 @@ var hitPlayer = function(player) {
   player.hitTime = SYNC.gameClock;
   player.clear = false;
   ++player.hits;
+  audio.play_sound('hit');
 };
 
 var Game;
