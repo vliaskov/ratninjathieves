@@ -1,7 +1,7 @@
 Rat Ninja Thieves
 =================
 
-<a href="http://greggman.github.com/ratninjathieveso/rat_ninja_thieves.html">Rat Ninja Thieves</a>
+<a href="http://greggman.github.com/ratninjathieves/rat_ninja_thieves.html">Rat Ninja Thieves</a>
 was developed during the <a href="http://www.meetup.com/game-developers-berlin/events/135541562/">8hr Berlin Mini Game Jam Sept 14th, 2013</a>.
 
 The premise is there are rats running down a corridor together. Lasers guard the corridor.
@@ -24,7 +24,7 @@ The plays call out "Jump!" to tell the other players when to jump over the laser
 
 By default there are 100 lasers to jump.
 
-<a href="http://greggman.github.com/ratninjathieveso/rat_ninja_thieves.html">Click here to play</a>.
+<a href="http://greggman.github.com/ratninjathieves/rat_ninja_thieves.html">Click here to play</a>.
 
 Credits
 -------
